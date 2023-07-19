@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Utils } from 'alchemy-sdk';
 import { useEffect, useState } from 'react';
 
@@ -94,7 +95,7 @@ export const Transactions = () => {
               {blockTransactions.map(transaction => {
                 return (
                   <tr key={transaction.hash}>
-                    <td >{substring(transaction.hash, 32)}</td>
+                    <td ><Link to={`/transaction/${transaction.hash}`}>{substring(transaction.hash, 32)}</Link></td>
                     <td>{transaction.blockNumber}</td>
                     <td>{transaction.from}</td>
                     <td>{transaction.to}</td>
