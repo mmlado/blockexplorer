@@ -7,7 +7,7 @@ import './App.css';
 function App() {
   return <div className="App">
     <Routes>
-    <Route path="/" element={<Transactions />} /> 
+    <Route path="/:id" element={<Transactions />} /> 
     <Route path="/transaction/:id" element={<TransactionDetails />} />
     </Routes>
   </div>;

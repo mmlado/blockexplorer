@@ -1,22 +1,29 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Utils } from 'alchemy-sdk';
 import { useEffect, useState } from 'react';
 
-import { currentBlockNumber, transactionList } from '../util/interact';
+import { currentBlockNumber, transactionList, calculateFee } from '../util/interact';
 
 export const Transactions = () => {
+    const { id } = useParams();
+
     const [blockNumber, setBlockNumber] = useState();
     const [blockTransactions, setBlockTransactions] = useState([]);
+
+
   
     useEffect(() => {
       async function getBlockNumber() {
         if (!blockNumber) {
+          if (!id)
           setBlockNumber(await currentBlockNumber());
+          else
+          setBlockNumber(parseInt(id));
         }
       }
   
       getBlockNumber();
-    });
+    }, [id]);
   
     useEffect(() => {
       async function getTransactions() {
@@ -44,16 +51,6 @@ export const Transactions = () => {
         return value;
       }
       return value.substring(0, index) + '...';
-    }
-  
-    const calculateFee = (limit, price, toFixed) => {
-      const gasFee = limit * price;
-  
-      if(gasFee.toString() === "NaN") {
-        return "0";
-      }
-      
-      return parseFloat(Utils.formatEther(gasFee.toString())).toFixed(toFixed);
     }
   
     const Block = () => {
