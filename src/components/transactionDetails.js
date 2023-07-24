@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { transactionReciept } from '../util/interact';
+import { Detail } from './common';
+import { Utils } from 'alchemy-sdk';
 
 export const TransactionDetails = () => {
     const { id } = useParams();
@@ -10,8 +12,6 @@ export const TransactionDetails = () => {
 
     useEffect(() => {
         async function getReciept() {
-            const result = await transactionReciept(id);
-            console.log(result);
             setReciept(await transactionReciept(id));
 
         }
@@ -23,54 +23,29 @@ export const TransactionDetails = () => {
             Loading...
         </>
     else
-    return <>
-        <div style={{
-            display:"flex", 
-            justifyContent:"center", 
-            marginTop: 24, 
-            fontSize: 24,
-        }}>
-            <b>Transaction Details</b>
-        </div>
-        <div style={{
-            display:"flex", 
-            justifyContent:"center", 
-            marginTop: 24, 
-            fontSize: 24,
-        }}>
-            <div>{id}</div>
-        </div>
-        <table className="Reciept">
-            <tbody>
-                <tr>
-                    <td>Hash</td>
-                    <td>{reciept.transactionHash}</td>
-                </tr>
-                <tr>
-                    <td>Block Number</td>
-                    <td><Link to={`/${reciept.blockNumber}`}>{reciept.blockNumber}</Link></td>
-                </tr>
-                <tr>
-                    <td>From</td>
-                    <td>{reciept.from}</td>
-                </tr>
-                <tr>
-                    <td>To</td>
-                    <td>{reciept.to}</td>
-                </tr>
-                <tr>
-                    <td>Confirmations</td>
-                    <td>{reciept.confirmations}</td>
-                </tr>
-                <tr>
-                    <td>Transaction fee</td>
-                    <td>{reciept.gasUsed.number}</td>
-                </tr>
-                <tr>
-                    <td>Status</td>
-                    <td>{reciept.status ? 'success' : 'failed'}</td>
-                </tr>
-            </tbody>
-        </table>
-    </>
+        return <>
+            <div style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: 24,
+                fontSize: 24,
+            }}>
+                <b>Transaction Details</b>
+            </div>
+            <div style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: 24,
+                fontSize: 24,
+            }}>
+                <div>{id}</div>
+            </div>
+            <Detail name={"Hash"} value={reciept.transactionHash} />
+            <Detail name={"Block Number"} value={reciept.blockNumber} link={`/${reciept.blockNumber}`} />
+            <Detail name={"From"} value={reciept.from} link={`/account/${reciept.from}`} />
+            <Detail name={"To"} value={reciept.to} link={`/account/${reciept.to}`} />
+            <Detail name={"Confirmations"} value={reciept.confirmations} />
+            <Detail name={"Transaction fee"} value={Utils.formatEther(reciept.gasUsed).toString()} />
+            <Detail name={"Status"} value={reciept.status ? 'success' : 'failed'} />
+        </>
 }
